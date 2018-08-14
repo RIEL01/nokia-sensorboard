@@ -1483,24 +1483,24 @@
  1626               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 graphics.c
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:2      *ABS*:0000003f __SREG__
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:3      *ABS*:0000003e __SP_H__
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:4      *ABS*:0000003d __SP_L__
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:5      *ABS*:00000034 __CCP__
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:18     .text:00000000 glcd_get_pixel
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:70     .text:00000046 glcd_draw_bitmap
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:94     .text:0000005e glcd_invert_pixel
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:153    .text:000000aa glcd_invert_area
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:231    .text:00000102 glcd_set_pixel
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:326    .text:00000180 glcd_fill_circle
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:586    .text:000002fe glcd_draw_circle
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:773    .text:0000041c glcd_draw_rect_thick
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:1009   .text:00000568 glcd_draw_rect
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:1159   .text:0000063a glcd_fill_rect
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:1297   .text:000006f0 glcd_draw_line
-C:\Users\RIEL\AppData\Local\Temp/ccFpvPLG.s:1463   .text:000007c2 glcd_draw_rect_shadow
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:2      *ABS*:0000003f __SREG__
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:3      *ABS*:0000003e __SP_H__
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:4      *ABS*:0000003d __SP_L__
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:5      *ABS*:00000034 __CCP__
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:18     .text:00000000 glcd_get_pixel
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:70     .text:00000046 glcd_draw_bitmap
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:94     .text:0000005e glcd_invert_pixel
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:153    .text:000000aa glcd_invert_area
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:231    .text:00000102 glcd_set_pixel
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:326    .text:00000180 glcd_fill_circle
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:586    .text:000002fe glcd_draw_circle
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:773    .text:0000041c glcd_draw_rect_thick
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:1009   .text:00000568 glcd_draw_rect
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:1159   .text:0000063a glcd_fill_rect
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:1297   .text:000006f0 glcd_draw_line
+C:\Users\RIEL\AppData\Local\Temp/ccRvJWqG.s:1463   .text:000007c2 glcd_draw_rect_shadow
 
 UNDEFINED SYMBOLS
 glcd_buffer

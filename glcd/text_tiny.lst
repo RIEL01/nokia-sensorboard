@@ -597,20 +597,20 @@
  700               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 text_tiny.c
-C:\Users\RIEL\AppData\Local\Temp/ccbsOzYi.s:2      *ABS*:0000003f __SREG__
-C:\Users\RIEL\AppData\Local\Temp/ccbsOzYi.s:3      *ABS*:0000003e __SP_H__
-C:\Users\RIEL\AppData\Local\Temp/ccbsOzYi.s:4      *ABS*:0000003d __SP_L__
-C:\Users\RIEL\AppData\Local\Temp/ccbsOzYi.s:5      *ABS*:00000034 __CCP__
-C:\Users\RIEL\AppData\Local\Temp/ccbsOzYi.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\RIEL\AppData\Local\Temp/ccbsOzYi.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\RIEL\AppData\Local\Temp/ccbsOzYi.s:18     .text:00000000 glcd_tiny_set_font
-C:\Users\RIEL\AppData\Local\Temp/ccbsOzYi.s:49     .text:00000022 glcd_tiny_draw_char_xy
-C:\Users\RIEL\AppData\Local\Temp/ccbsOzYi.s:208    .text:0000010e glcd_tiny_draw_char
-C:\Users\RIEL\AppData\Local\Temp/ccbsOzYi.s:364    .text:00000204 glcd_tiny_draw_string_P
-C:\Users\RIEL\AppData\Local\Temp/ccbsOzYi.s:454    .text:0000026c glcd_tiny_draw_string
-C:\Users\RIEL\AppData\Local\Temp/ccbsOzYi.s:536    .text:000002d4 glcd_tiny_invert_line
-C:\Users\RIEL\AppData\Local\Temp/ccbsOzYi.s:564    .text:000002ee glcd_tiny_draw_string_ammend_P
-C:\Users\RIEL\AppData\Local\Temp/ccbsOzYi.s:593    .text:0000030c glcd_tiny_draw_string_ammend
+C:\Users\RIEL\AppData\Local\Temp/cc4vWYFf.s:2      *ABS*:0000003f __SREG__
+C:\Users\RIEL\AppData\Local\Temp/cc4vWYFf.s:3      *ABS*:0000003e __SP_H__
+C:\Users\RIEL\AppData\Local\Temp/cc4vWYFf.s:4      *ABS*:0000003d __SP_L__
+C:\Users\RIEL\AppData\Local\Temp/cc4vWYFf.s:5      *ABS*:00000034 __CCP__
+C:\Users\RIEL\AppData\Local\Temp/cc4vWYFf.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\RIEL\AppData\Local\Temp/cc4vWYFf.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\RIEL\AppData\Local\Temp/cc4vWYFf.s:18     .text:00000000 glcd_tiny_set_font
+C:\Users\RIEL\AppData\Local\Temp/cc4vWYFf.s:49     .text:00000022 glcd_tiny_draw_char_xy
+C:\Users\RIEL\AppData\Local\Temp/cc4vWYFf.s:208    .text:0000010e glcd_tiny_draw_char
+C:\Users\RIEL\AppData\Local\Temp/cc4vWYFf.s:364    .text:00000204 glcd_tiny_draw_string_P
+C:\Users\RIEL\AppData\Local\Temp/cc4vWYFf.s:454    .text:0000026c glcd_tiny_draw_string
+C:\Users\RIEL\AppData\Local\Temp/cc4vWYFf.s:536    .text:000002d4 glcd_tiny_invert_line
+C:\Users\RIEL\AppData\Local\Temp/cc4vWYFf.s:564    .text:000002ee glcd_tiny_draw_string_ammend_P
+C:\Users\RIEL\AppData\Local\Temp/cc4vWYFf.s:593    .text:0000030c glcd_tiny_draw_string_ammend
 
 UNDEFINED SYMBOLS
 font_current

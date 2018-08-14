@@ -18,12 +18,95 @@
 #include <avr/pgmspace.h>
 #include <util/delay.h>
 
+
+
+#define F_CPU 16000000UL  // 1 MHz
+
 /* Function prototypes */
 static void setup(void);
 
+static void setup(void)
+{
+	/* Set up glcd, also sets up SPI and relevent GPIO pins */
+	glcd_init();
+}
+
+uint8_t ms, ms10,ms100,sec,min,entprell, state;
+uint16_t x1;			//Initialisierung für Ball
+uint16_t y1;			//Initialisierung für Ball
+uint16_t x2;			//Initialisierung für Schrift
+uint16_t y2;			//Initialisierung für Schrift
+uint16_t x3;			//Initialisierung für Balken unten
+uint16_t y3;			//Initialisierung für Balken unten
+uint16_t x4;			//Initialisierung für Balken oben
+uint16_t y4;			//Initialisierung für Balken oben
+uint16_t x5;			//Initialisierung für weisser Balken unten
+uint16_t y5;			//Initialisierung für weisser Balken unten
+uint16_t x6;			//Initialisierung für weisser Balken oben
+uint16_t y6;			//Initialisierung für weisser Balken oben
+uint8_t Lauflicht;		//Initialisierung für Ballrichtung
 
 
-uint8_t state;
+
+ISR(TIMER0_OVF_vect)
+{
+	static uint8_t ISR_zaehler=0;
+	static uint8_t ms100=0;
+	static uint8_t sek=0;
+	static uint8_t min=0;
+	static uint8_t h=0;
+	static uint8_t d=0;
+	static uint8_t w=0;
+	
+	
+	TCNT0 = 0;					
+	ISR_zaehler++;					//"ISR_zaehler" aufwärts zählen
+	if(ISR_zaehler==12)				//Sobald 8bit zwölf mal durchlaufen (100ms), Zähler wieder auf Null setzen
+	{
+		ISR_zaehler=0;				//Auf Null zurücksetzen sobald 100ms erreicht sind
+		ms100++;
+		x2++;						//"ms100" aufwärts zählen
+	}		
+
+	
+	if(ms100==10)					//Sobald 8bit 12-mal durchlaufen (1sek), Zähler wieder auf Null setzen
+	{
+		ms100=0;					//Auf Null zurücksetzen sobald 1sek erreicht sind
+		sek++;						//"sek" aufwärts zählen
+	}
+	
+	
+	if(sek==60)						//Sobald 8bit 60-mal durchlaufen (1min), Zähler wieder auf Null setzen
+	{
+		sek=0;						//Auf Null zurücksetzen sobald 1min erreicht sind
+		min++;						//"min" aufwärts zählen
+	}
+	
+	
+	if(min==60)						//Sobald 8bit 60-mal durchlaufen (1h), Zähler wieder auf Null setzen
+	{
+		min=0;						//Auf Null zurücksetzen sobald 1h erreicht sind
+		h++;						//"h" aufwärts zählen
+	}
+	
+	
+	if(h==24)						//Sobald 8bit 24-mal durchlaufen (1d), Zähler wieder auf Null setzen
+	{
+		h=0;						//Auf Null zurücksetzen sobald 1d erreicht sind
+		d++;						//"d" aufwärts zählen
+	}
+
+	
+	if(d==7)						//Sobald 8bit 7-mal durchlaufen (1w), Zähler wieder auf Null setzen
+	{
+		d=0;						//Auf Null zurücksetzen sobald 1w erreicht sind
+		w++;						//"w" aufwärts zählen
+		y1++;
+	}							
+	
+}									//End ISR
+
+
 
 
 const unsigned char batman[] PROGMEM= 
@@ -83,49 +166,85 @@ const unsigned char batman[] PROGMEM=
 	
 int main(void)
 {	
+	DDRD |=(1 << PD2);		//Taster_2 als EIngang setzen
+	PORTD |=(1 << PD2);	//Ausgang Taster_2 auf low setzen (PULLUP-WIDERSTAND)
+	DDRD |=(1 << PD5);		//Taster_5 als EIngang setzen
+	PORTD |=(1 << PD5);	//Ausgang Taster_5 auf low setzen (PULLUP-WIDERSTAND)
+	DDRD |=(1 << PD6);		//Taster_6 als EIngang setzen
+	PORTD |=(1 << PD6);	//Ausgang Taster_6 auf low setzen (PULLUP-WIDERSTAND)
+	
+	TCCR0A		= 0x00;
+	TCCR0B		= 0x04;
+	TIMSK0		|= (1 << TOIE0);
+	TIFR0	|= (1 << TOV0);
+	sei();
+	
+	/* Backlight pin PL3, set as output, set high for 100% output */
+	DDRB |= (1<<PB2);
+	PORTB |= (1<<PB2);
+	
+
+    sei();					// enable interrupts
 	
 	setup();
 	
 	glcd_clear();
 	glcd_write();
 	
-	state=1;
-	
+	x1=42;
+	y1=25;
+	x2=0;
+	y2=0;
+	x3=34;
+	y3=46;
+	x4=34;
+	y4=8;
+	x5=x3-1;
+
 		
+	// Display
+	glcd_tiny_set_font(Font5x7,5,7,32,127);
+	glcd_clear_buffer();
+		
+	
 	while(1) 
 	{
-		switch(state)
+		if(Lauflicht==0)										//Sobald Ball gleich 0 ist, soll y1 aufwärts zählen und somit Ball nach unten fallen
 		{
-			case 1:	glcd_test_circles();
-					break;
-			case 2:	glcd_test_counter_and_graph();
-					break;
-			case 3:	glcd_test_text_up_down();
-					break;
-			case 4:	glcd_test_tiny_text();
-					break;
-			case 5:	glcd_test_hello_world();
-					break;
-			case 6:	glcd_test_rectangles();
-					break;
-			case 7:	glcd_test_scrolling_graph();
-					break;
-			case 8: glcd_draw_bitmap(batman);
-					glcd_write();
-					break;
-		}//end of switch
+			y1++;
+		}
+		if(Lauflicht==1)										//Sobald Ball gleich 1 ist, soll y1 abwärts gezählt und somit Ball nach oben gehen
+		{
+			y1--;
+		}
+		glcd_draw_string_xy( x2,  y2,  "HALLO");				//Schrift (Übertitel)
+		glcd_fill_rect(x2-1,y2,1,7,WHITE);						//Weisser Balken nach Schrift
+		glcd_fill_rect(x3,y3,16,2,BLACK);						//Schwarzer Balken (unten) um Ball abprallen zu können
+		glcd_fill_rect(x4,y4,16,2,BLACK);						//Schwarzer Balken (oben) um Ball abprallen zu können
+		glcd_fill_circle( x1, y1-1 , 2, WHITE);				
+		glcd_fill_circle( x1, y1, 2, BLACK);
+		glcd_fill_circle( x1, y1+1 , 2, WHITE);
+		glcd_fill_circle( x1, y1, 2, BLACK);
+
+		if(y1==44)												//Sobald der Ball den Balken erreichte, soll der Wert wieder auf Anfang gesetzt werden (unten)
+		{
+			Lauflicht=1;
+		}
+		if(y1==14)												//Sobald der Ball den Balken erreichte, soll der Wert wieder auf Anfang gesetzt werden (oben)
+		{
+			Lauflicht=0;
+		}
+		if(x2==85)												//Sobald die Schrift am Ende des Bildschirms angelangt ist, soll die Schrift auf der anderen Seite wieder eingefügt werden
+		{
+			x2=-40;
+		}
 		
+		glcd_write();
 	}//End of while
+	
 	
 	
 	//---------------------------------------------
 	
 	return 0;
 }//end of main
-
-static void setup(void)
-{
-	/* Set up glcd, also sets up SPI and relevent GPIO pins */
-	glcd_init();
-}
-

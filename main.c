@@ -21,6 +21,11 @@
 
 
 #define F_CPU 16000000UL  // 1 MHz
+#define gruener_Taster !(PIND&(1<<PD5))				//Definition für Abfrage des grünen Taster
+#define roter_Taster !(PIND&(1<<PD6))				//Definition für Abfrage des roten Tasters
+#define blauer_Taster !(PIND&(1<<PD2))				//Definition für Abfrage des blauen Tasters
+#define blauer_Taster_Ruhezustand PIND&(1<<PD2)		//Definition für Abfrage des blauen Tasters im Ruhezustand
+
 
 /* Function prototypes */
 static void setup(void);
@@ -32,20 +37,22 @@ static void setup(void)
 }
 
 uint8_t ms, ms10,ms100,sec,min,entprell, state;
-uint16_t x1;			//Initialisierung für Ball
-uint16_t y1;			//Initialisierung für Ball
-uint16_t x2;			//Initialisierung für Schrift
-uint16_t y2;			//Initialisierung für Schrift
-uint16_t x3;			//Initialisierung für Balken unten
-uint16_t y3;			//Initialisierung für Balken unten
-uint16_t x4;			//Initialisierung für Balken oben
-uint16_t y4;			//Initialisierung für Balken oben
-uint16_t x5;			//Initialisierung für weisser Balken unten
-uint16_t y5;			//Initialisierung für weisser Balken unten
-uint16_t x6;			//Initialisierung für weisser Balken oben
-uint16_t y6;			//Initialisierung für weisser Balken oben
-uint8_t Lauflicht;		//Initialisierung für Ballrichtung
-
+uint16_t Ball_X;					//Initialisierung für Ball
+uint16_t Ball_Y;					//Initialisierung für Ball
+uint16_t Schrift_X;					//Initialisierung für Schrift
+uint16_t Schrift_Y;					//Initialisierung für Schrift
+uint16_t Balken_unten_X;			//Initialisierung für Balken unten
+uint16_t Balken_unten_Y;			//Initialisierung für Balken unten
+uint16_t Balken_oben_X;				//Initialisierung für Balken oben
+uint16_t Balken_oben_Y;				//Initialisierung für Balken oben
+uint16_t Balken_weiss_unten_X;		//Initialisierung für weisser Balken unten
+uint16_t Balken_weiss_unten_Y;		//Initialisierung für weisser Balken unten
+uint16_t Balken_weiss_oben_X;		//Initialisierung für weisser Balken oben
+uint16_t Balken_weiss_oben_Y;		//Initialisierung für weisser Balken oben
+uint8_t Lauflicht;					//Initialisierung für Ballrichtung
+char String[3]={000};				//Initialisierung für String mit 10 Feldern
+uint8_t Variable=123;				//Initialisierung der Variable
+uint8_t Nichts;						//Initialisierung für Nichts, sodass "Variable=123" durch drücken des blauen Tasters gelöscht wird
 
 
 ISR(TIMER0_OVF_vect)
@@ -65,7 +72,7 @@ ISR(TIMER0_OVF_vect)
 	{
 		ISR_zaehler=0;				//Auf Null zurücksetzen sobald 100ms erreicht sind
 		ms100++;
-		x2++;						//"ms100" aufwärts zählen
+		Schrift_X++;						//"ms100" aufwärts zählen
 	}		
 
 	
@@ -101,7 +108,7 @@ ISR(TIMER0_OVF_vect)
 	{
 		d=0;						//Auf Null zurücksetzen sobald 1w erreicht sind
 		w++;						//"w" aufwärts zählen
-		y1++;
+		Ball_Y++;
 	}							
 	
 }									//End ISR
@@ -138,7 +145,7 @@ const unsigned char batman[] PROGMEM=
 	0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3e, 0x3c, 0x78, 0x70, 
 	0xe0, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03, 0x0f, 
-	0x3f, 0x7f, 0x3f, 0x3f, 0x1f, 0x1f, 0x0f, 0x0f, 0x0f, 0x0f, 
+	0x3f, 0x7f, 0x3f, 0x3f, 0X1f, 0x1f, 0x0f, 0x0f, 0x0f, 0x0f, 
 	0x0f, 0x1f, 0x1f, 0x1f, 0x3f, 0x3f, 0x7f, 0xff, 0xff, 0xff, 
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
 	0xff, 0x7f, 0x3f, 0x3f, 0x1f, 0x1f, 0x1f, 0x0f, 0x0f, 0x0f, 
@@ -165,7 +172,7 @@ const unsigned char batman[] PROGMEM=
 	};
 	
 int main(void)
-{	
+{
 	DDRD |=(1 << PD2);		//Taster_2 als EIngang setzen
 	PORTD |=(1 << PD2);	//Ausgang Taster_2 auf low setzen (PULLUP-WIDERSTAND)
 	DDRD |=(1 << PD5);		//Taster_5 als EIngang setzen
@@ -191,16 +198,16 @@ int main(void)
 	glcd_clear();
 	glcd_write();
 	
-	x1=42;
-	y1=25;
-	x2=0;
-	y2=0;
-	x3=34;
-	y3=46;
-	x4=34;
-	y4=8;
-	x5=x3-1;
-
+	Ball_X=42;
+	Ball_Y=25;
+	Schrift_X=0;
+	Schrift_Y=0;
+	Balken_unten_X=34;
+	Balken_unten_Y=46;
+	Balken_oben_X=34;
+	Balken_oben_Y=8;
+	Balken_weiss_unten_X=Balken_unten_X-1;
+	Balken_weiss_unten_Y=Balken_unten_Y;
 		
 	// Display
 	glcd_tiny_set_font(Font5x7,5,7,32,127);
@@ -209,36 +216,55 @@ int main(void)
 	
 	while(1) 
 	{
-		if(Lauflicht==0)										//Sobald Ball gleich 0 ist, soll y1 aufwärts zählen und somit Ball nach unten fallen
+		if(Lauflicht==0)										//Sobald Ball gleich 0 ist, soll Ball_Y aufwärts zählen und somit Ball nach unten fallen
 		{
-			y1++;
+			Ball_Y++;
 		}
-		if(Lauflicht==1)										//Sobald Ball gleich 1 ist, soll y1 abwärts gezählt und somit Ball nach oben gehen
+		if(Lauflicht==1)										//Sobald Ball gleich 1 ist, soll Ball_Y abwärts gezählt und somit Ball nach oben gehen
 		{
-			y1--;
+			Ball_Y--;
 		}
-		glcd_draw_string_xy( x2,  y2,  "HALLO");				//Schrift (Übertitel)
-		glcd_fill_rect(x2-1,y2,1,7,WHITE);						//Weisser Balken nach Schrift
-		glcd_fill_rect(x3,y3,16,2,BLACK);						//Schwarzer Balken (unten) um Ball abprallen zu können
-		glcd_fill_rect(x4,y4,16,2,BLACK);						//Schwarzer Balken (oben) um Ball abprallen zu können
-		glcd_fill_circle( x1, y1-1 , 2, WHITE);				
-		glcd_fill_circle( x1, y1, 2, BLACK);
-		glcd_fill_circle( x1, y1+1 , 2, WHITE);
-		glcd_fill_circle( x1, y1, 2, BLACK);
+		glcd_draw_string_xy( Schrift_X,  Schrift_Y,  "HALLO");				//Schrift (Übertitel)
+		glcd_fill_rect(Schrift_X-1,Schrift_Y,1,7,WHITE);						//Weisser Balken nach Schrift
+		glcd_fill_rect(Balken_unten_X,Balken_unten_Y,16,2,BLACK);						//Schwarzer Balken (unten) um Ball abprallen zu können
+		glcd_fill_rect(Balken_oben_X,Balken_oben_Y,16,2,BLACK);						//Schwarzer Balken (oben) um Ball abprallen zu können
+		glcd_fill_circle( Ball_X, Ball_Y-1 , 2, WHITE);				
+		glcd_fill_circle( Ball_X, Ball_Y, 2, BLACK);
+		glcd_fill_circle( Ball_X, Ball_Y+1 , 2, WHITE);
+		glcd_fill_circle( Ball_X, Ball_Y, 2, BLACK);
 
-		if(y1==44)												//Sobald der Ball den Balken erreichte, soll der Wert wieder auf Anfang gesetzt werden (unten)
+		if(Ball_Y==44)												//Sobald der Ball den Balken erreichte, soll der Wert wieder auf Anfang gesetzt werden (unten)
 		{
 			Lauflicht=1;
 		}
-		if(y1==14)												//Sobald der Ball den Balken erreichte, soll der Wert wieder auf Anfang gesetzt werden (oben)
+		if(Ball_Y==14)												//Sobald der Ball den Balken erreichte, soll der Wert wieder auf Anfang gesetzt werden (oben)
 		{
 			Lauflicht=0;
 		}
-		if(x2==85)												//Sobald die Schrift am Ende des Bildschirms angelangt ist, soll die Schrift auf der anderen Seite wieder eingefügt werden
+		if(Schrift_X==85)												//Sobald die Schrift am Ende des Bildschirms angelangt ist, soll die Schrift auf der anderen Seite wieder eingefügt werden
 		{
-			x2=-40;
+			Schrift_X=-40;
 		}
-		
+		if(gruener_Taster)
+		{
+			glcd_fill_rect(Balken_weiss_unten_X++,Balken_weiss_unten_Y,1,2,WHITE);
+			glcd_fill_rect(Balken_unten_X++,Balken_unten_Y,1,2,BLACK);
+		}
+		if(roter_Taster)
+		{
+			glcd_fill_rect(Balken_weiss_unten_X--,Balken_weiss_unten_Y,1,2,WHITE);
+			glcd_fill_rect(Balken_unten_X--,Balken_unten_Y,1,2,BLACK);
+		}
+		if(blauer_Taster)
+		{
+			sprintf(String, "%d", Variable);
+			glcd_draw_string_xy(0,15,String);
+		}
+		if(blauer_Taster_Ruhezustand)
+		{
+			sprintf(String, "000%d",Nichts);
+			glcd_draw_string_xy(0,15,String);
+		}
 		glcd_write();
 	}//End of while
 	
